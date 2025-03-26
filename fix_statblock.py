@@ -1,14 +1,53 @@
+#!/home/hoonakker/anaconda3/envs/fixStatblocks/bin/python
 import argparse
+import os
 import re
 import sys
-
 import pyperclip
+import json
+
+# current directory
+current_dir = os.path.dirname(os.path.realpath(__file__))
+translation_file = os.path.join(current_dir,'translation.json')
+print(f"Translation file : {translation_file}")
+with open(translation_file, 'r') as file:
+    translations_data = json.load(file)
 
 # Définir le parser en global
 parser = argparse.ArgumentParser(description="Fix the statblock to be compatible to homebrewery.")
 parser.add_argument('-file', type=str, help="The file to fix.")
 args = parser.parse_args()
 print(args.file)
+
+
+def replace_spells_name(text,translation_type='spells'):
+    # Function to replace spell names with translations
+    def replace(match):
+        spell_english = match.group(0).lower().replace('*', '')  # Remove the asterisks and convert to lowercase
+        matching_key = next((key for key in translations_data[translation_type] if key.lower() == spell_english), None)
+
+        # Convert to lowercase to match
+        if not matching_key:
+            print(f"The spell '{match.group(0)}' is not in the translation dictionary, consider adding it!")
+            return match.group(0)
+
+        # If the spell is in the translation dictionary, return its French translation
+        spell_french = translations_data[translation_type][matching_key]
+        # return f"{spell_french} ({match.group(0)})"
+        return f"{spell_french}"
+
+
+    # Regular expression to capture words between asterisks
+    pattern = r'(\*[\w\s]+\*)'  # Captures anything between asterisks
+    level_pattern = r"(Cantrips|[0-9]+st level|[0-9]+nd level|[0-9]+rd level|[0-9]+th level)"  # Capture les niveaux de sorts
+
+    # Si la ligne contient un des niveaux (Cantrips, 1st level, etc.)
+    if re.search(level_pattern, text):
+        # Appliquer le remplacement dans tout le texte
+        return re.sub(pattern, replace, text)
+
+    # Apply the replacement across the text
+    return text
 
 
 def remove_greaters(line: str) -> str:
@@ -36,7 +75,7 @@ def fix_carac(line: str) -> str:
 # Function to convert feet to meters
 def convert_ft_to_m(feet):
     meters = feet * 0.3048
-    return round(meters, 2)  # Round to 2 decimal places
+    return round(meters)  # Round to 2 decimal places
 
 
 # Function to replace 'ft.' with 'm.' and convert the number
@@ -60,8 +99,10 @@ def treat_line(line: str) -> str:
     line = remove_greaters(line)
     line = fix_carac(line)
     line = convert_ft_to_m_in_text(line)
+    line = replace_spells_name(line)
 
     return line
+
 
 def copy_file_to_clipboard(filename):
     try:
