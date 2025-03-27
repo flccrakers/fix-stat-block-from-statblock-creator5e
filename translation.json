@@ -52,6 +52,18 @@
     "Detect Magic": "Détection de la magie",
     "Magic Missile": "Projectiles magiques",
     "Suggestion": "Suggestion",
-    "Cone of Cold": "Cône de froid"
+    "Cone of Cold": "Cône de froid",
+    "Thaumaturgy": "Thaumaturgie",
+    "Minor Illusion": "Illusion mineure",
+    "Charm Person": "Charme-personne",
+    "Disguise Self": "Métamorphose",
+    "Mirror Image": "Image miroir",
+    "Blur": "Flou",
+    "Silent Image": "Image silencieuse",
+    "Invisibility": "Invisibilité",
+    "Detect Thoughts": "Détection des pensées",
+    "Fear": "Peur",
+    "Hypnotic Pattern": "Motif hypnotique",
+    "Eldritch Blast": "Salve éldritch"
   }
 }

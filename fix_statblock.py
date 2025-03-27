@@ -1,4 +1,4 @@
-#!/home/hoonakker/anaconda3/envs/fixStatblocks/bin/python
+#!/home/fhoonakker/anaconda3/envs/dndFixStatBlock.py/bin/python
 import argparse
 import os
 import re
@@ -17,7 +17,7 @@ with open(translation_file, 'r') as file:
 parser = argparse.ArgumentParser(description="Fix the statblock to be compatible to homebrewery.")
 parser.add_argument('-file', type=str, help="The file to fix.")
 args = parser.parse_args()
-print(args.file)
+print(f"File to fix: {args.file}")
 
 
 def replace_spells_name(text,translation_type='spells'):
